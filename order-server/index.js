@@ -2,22 +2,33 @@ const { request } = require("express");
 const express = require("express");
 const router = express.Router();
 const axios = require("axios");
-// const fetch = require("node-fetch");
+const bodyParser = require("body-parser");
+const fs = require("fs");
 
 const app = express();
 
 app.use(router);
 
-router.post("/purchase", async (req, res) => {
-  const id = req?.query?.id;
+router.use(bodyParser.json());
+
+router.post("/purchase", (req, res) => {
+  const id = req?.body?.id;
   let result;
-  axios.get(`http://localhost:3000/info?id=${id}`).then((resp) => {
+  let orderFileData = fs.readFileSync("./OrderList.json");
+  let OrderList = JSON.parse(orderFileData);
+  axios.get(`http://192.168.1.17:3000/info?id=${id}`).then((resp) => {
     // console.log(resp.data);
     result = resp.data;
-    console.log(result);
     if (parseInt(result[0]["number of item in stock"]) > 0) {
-      axios.put(`http://localhost:3000/update?id=${id}`);
-      res.json(`you purchaced the ${result[0]["titel"]} successfuly :)`);
+      axios.put(`http://192.168.1.17:3000/update?id=${id}`).then((e) => {
+        finalResult = e.data;
+        console.log(finalResult);
+        OrderList.push(finalResult[0]);
+        fs.writeFile("OrderList.json", JSON.stringify(OrderList), (error) =>
+          console.log(error)
+        );
+        res.json(`you purchaced the ${finalResult[0]["titel"]} successfuly :)`);
+      });
     } else {
       res.json(`this item not found :(`);
     }
