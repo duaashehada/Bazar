@@ -1,0 +1,5 @@
+FROM dosproject 
+
+EXPOSE 8000
+
+CMD ["npm" , "run" ,  "bazar"] 

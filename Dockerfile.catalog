@@ -1,0 +1,5 @@
+FROM dosproject
+
+EXPOSE 3000
+
+CMD ["npm" , "run" ,  "catalog"] 

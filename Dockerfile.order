@@ -1,0 +1,5 @@
+FROM dosproject
+
+EXPOSE 5000
+
+CMD ["npm" , "run" ,  "order"] 
