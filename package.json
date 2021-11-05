@@ -9,14 +9,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "catalog": "node ./catalog-server/index.js",
-    "order": "node ./order-server/index.js" ,
+    "order": "node ./order-server/index.js",
     "bazar": "node ./Bazar/index.js"
   },
   "author": "Duaa Shehada",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.23.0",
-    "body-parser": "^1.11.0",
+    "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.11.2",
