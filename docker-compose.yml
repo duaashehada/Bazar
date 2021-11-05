@@ -1,1 +1,29 @@
 version: "1.0.0"
+services:
+  catalog:
+    ports:
+      - 3000:3000
+    build:
+      context: .
+      dockerfile: Dockerfile.catalog
+    volumes:
+      - ./BazarBooks.json:/app/src/BazarBooks.json
+      - ./OrderList.json:/app/src/OrderList.json
+  order:
+    ports:
+      - 5000:5000
+    build:
+      context: .
+      dockerfile: Dockerfile.order
+    volumes:
+      - ./BazarBooks.json:/app/src/BazarBooks.json
+      - ./OrderList.json:/app/src/OrderList.json
+  bazar:
+    ports:
+      - 8000:8000
+    build:
+      context: .
+      dockerfile: Dockerfile.bazar
+    volumes:
+      - ./BazarBooks.json:/app/src/BazarBooks.json
+      - ./OrderList.json:/app/src/OrderList.json
