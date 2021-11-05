@@ -1,16 +1,9 @@
 const express = require("express");
 const router = express.Router();
-var bodyParser = require("body-parser");
-// const cors = require("cors");
 const fs = require("fs");
 
 const app = express();
-app.use(bodyParser.json());
-// app.use(cors());
 app.use(router);
-
-let fileData = fs.readFileSync("./BazarBooks.json");
-let BazarBooks = JSON.parse(fileData);
 
 router.get("/", (req, res) => {
   res.json("hello world from catalog");
@@ -19,6 +12,8 @@ router.get("/", (req, res) => {
 router.get("/search", (req, res) => {
   let Topic = req?.query?.Topic;
   const result = [];
+  let fileData = fs.readFileSync("./BazarBooks.json");
+  let BazarBooks = JSON.parse(fileData);
   for (const element of BazarBooks) {
     if (element["topic"] == Topic) {
       result.push(element);
@@ -31,6 +26,8 @@ router.get("/search", (req, res) => {
 router.get("/info", (req, res) => {
   const temp = req?.query?.id;
   let id = parseInt(temp);
+  let fileData = fs.readFileSync("./BazarBooks.json");
+  let BazarBooks = JSON.parse(fileData);
   const result = [];
   for (const element of BazarBooks) {
     if (element["id"] == id) {
@@ -43,15 +40,18 @@ router.get("/info", (req, res) => {
 router.put("/update", (req, res) => {
   const temp = req?.query?.id;
   let id = parseInt(temp);
+  let fileData = fs.readFileSync("./BazarBooks.json");
+  let BazarBooks = JSON.parse(fileData);
   const result = [];
   for (const element of BazarBooks) {
     if (element["id"] == id) {
+      element["number of item in stock"] =
+        parseInt(element["number of item in stock"]) - 1;
       result.push(element);
-      element["id"] = parseInt(element["id"]) - 1;
     }
   }
-  result[0]["number of item in stock"] =
-    parseInt(result[0]["number of item in stock"]) - 1;
+  // result[0]["number of item in stock"] =
+  //   parseInt(result[0]["number of item in stock"]) - 1;
 
   fs.writeFile("BazarBooks.json", JSON.stringify(BazarBooks), (error) =>
     console.log(error)
