@@ -9,6 +9,9 @@ services:
     volumes:
       - ./BazarBooks.json:/app/src/BazarBooks.json
       - ./OrderList.json:/app/src/OrderList.json
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.5
   order:
     ports:
       - 5000:5000
@@ -18,6 +21,9 @@ services:
     volumes:
       - ./BazarBooks.json:/app/src/BazarBooks.json
       - ./OrderList.json:/app/src/OrderList.json
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.6
   bazar:
     ports:
       - 8000:8000
@@ -27,3 +33,13 @@ services:
     volumes:
       - ./BazarBooks.json:/app/src/BazarBooks.json
       - ./OrderList.json:/app/src/OrderList.json
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.7
+networks:
+  vpcbr:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.5.0.0/16
+         gateway: 10.5.0.1
