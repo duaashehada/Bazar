@@ -12,6 +12,7 @@ router.get("/", (req, res) => {
 router.get("/search", (req, res) => {
   let Topic = req?.query?.Topic;
   const result = [];
+  console.log("in catalog in search end point");
   let fileData = fs.readFileSync("./BazarBooks.json");
   let BazarBooks = JSON.parse(fileData);
   for (const element of BazarBooks) {
@@ -26,6 +27,7 @@ router.get("/search", (req, res) => {
 router.get("/info", (req, res) => {
   const temp = req?.query?.id;
   let id = parseInt(temp);
+  console.log("in catalog in info end point");
   let fileData = fs.readFileSync("./BazarBooks.json");
   let BazarBooks = JSON.parse(fileData);
   const result = [];
@@ -40,6 +42,7 @@ router.get("/info", (req, res) => {
 router.put("/update", (req, res) => {
   const temp = req?.query?.id;
   let id = parseInt(temp);
+  console.log("in catalog in update end point");
   let fileData = fs.readFileSync("./BazarBooks.json");
   let BazarBooks = JSON.parse(fileData);
   const result = [];
@@ -53,9 +56,11 @@ router.put("/update", (req, res) => {
   // result[0]["number of item in stock"] =
   //   parseInt(result[0]["number of item in stock"]) - 1;
 
-  fs.writeFile("BazarBooks.json", JSON.stringify(BazarBooks), (error) =>
-    console.log(error)
-  );
+  fs.writeFile("BazarBooks.json", JSON.stringify(BazarBooks), (error) => {
+    if (error != null) {
+      console.log(error);
+    }
+  });
 
   res.json(result);
 });

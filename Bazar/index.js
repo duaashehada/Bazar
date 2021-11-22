@@ -14,6 +14,7 @@ router.use(bodyParser.json());
 router.get("/search", async (req, res) => {
   const Topic = req?.query?.Topic;
   let result;
+  console.log("request from bazat to catalog ");
   axios.get(`http://192.168.1.17:3000/search?Topic=${Topic}`).then((resp) => {
     // console.log(resp.data);
     result = resp.data;
@@ -25,6 +26,7 @@ router.get("/search", async (req, res) => {
 router.get("/info", async (req, res) => {
   const id = req?.query?.id;
   let result;
+  console.log("request from bazat to catalog ");
   axios.get(`http://192.168.1.17:3000/info?id=${id}`).then((resp) => {
     // console.log(resp.data);
     result = resp.data;
@@ -36,9 +38,11 @@ router.get("/info", async (req, res) => {
 router.post("/purchase", async (req, res) => {
   const id = req?.body?.id;
   let result;
+
   axios.post(`http://192.168.1.17:5000/purchase`, { id: id }).then((resp) => {
     result = resp.data;
     console.log(result);
+    console.log("request from bazar to order");
     res.json(result);
   });
 });
