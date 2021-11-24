@@ -17,11 +17,11 @@ router.post("/purchase", (req, res) => {
   console.log("in order in purchase end point");
   let orderFileData = fs.readFileSync("./OrderList.json");
   let OrderList = JSON.parse(orderFileData);
-  axios.get(`http://192.168.1.17:3000/info?id=${id}`).then((resp) => {
+  axios.get(`http://10.5.0.5:3000/info?id=${id}`).then((resp) => {
     // console.log(resp.data);
     result = resp.data;
     if (parseInt(result[0]["number of item in stock"]) > 0) {
-      axios.put(`http://192.168.1.17:3000/update?id=${id}`).then((e) => {
+      axios.put(`http://10.5.0.5:3000/update?id=${id}`).then((e) => {
         finalResult = e.data;
         console.log(finalResult);
         OrderList.push(finalResult[0]);
