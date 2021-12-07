@@ -3,9 +3,11 @@ const express = require("express");
 const router = express.Router();
 const axios = require("axios");
 const bodyParser = require("body-parser");
+const NodeCache = require("node-cache");
 // const fetch = require("node-fetch");
 
 const app = express();
+const cache = new NodeCache({ stdTTL: 15 });
 
 app.use(router);
 
