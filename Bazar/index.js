@@ -9,6 +9,25 @@ const NodeCache = require("node-cache");
 const app = express();
 const cache = new NodeCache({ stdTTL: 15 });
 
+//middleware
+const verifyCache = (req, res, next) => {
+  try {
+    const Topic = req?.query?.Topic;
+    const id = req?.query?.id;
+    const id_post = req?.body?.id;
+    if (cache.has(Topic)) {
+      return res.status(200).json(cache.get(Topic));
+    } else if (cache.has(id)) {
+      return res.status(200).json(cache.get(id));
+    } else if (cache.has(id_post)) {
+      return res.status(200).json(cache.get(id_post));
+    }
+    return next();
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
 app.use(router);
 
 router.use(bodyParser.json());
