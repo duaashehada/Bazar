@@ -14,13 +14,10 @@ const verifyCache = (req, res, next) => {
   try {
     const Topic = req?.query?.Topic;
     const id = req?.query?.id;
-    const id_post = req?.body?.id;
     if (cache.has(Topic)) {
       return res.status(200).json(cache.get(Topic));
     } else if (cache.has(id)) {
       return res.status(200).json(cache.get(id));
-    } else if (cache.has(id_post)) {
-      return res.status(200).json(cache.get(id_post));
     }
     return next();
   } catch (err) {
@@ -58,13 +55,12 @@ router.get("/info", verifyCache, async (req, res) => {
   });
 });
 
-router.post("/purchase", verifyCache, async (req, res) => {
+router.post("/purchase", async (req, res) => {
   const id_post = req?.body?.id;
   let result;
 
   axios.post(`http://10.5.0.6:5000/purchase`, { id: id_post }).then((resp) => {
     result = resp.data;
-    cache.set(id_post, result);
     console.log(result);
     console.log("request from bazar to order");
     res.json(result);
