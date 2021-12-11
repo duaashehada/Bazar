@@ -7,7 +7,6 @@ const NodeCache = require("node-cache");
 // const fetch = require("node-fetch");
 
 const app = express();
-const cache = new NodeCache({ stdTTL: 15 });
 //maximum number of cache elements is 20
 const cache = new NodeCache({ stdTTL: 35, maxKeys: 20 });
 let loadBalancing_flag = true;
@@ -83,19 +82,19 @@ router.get("/info", verifyCache, async (req, res) => {
 });
 
 router.post("/purchase", async (req, res) => {
-  const id_post = req?.body?.id;
+  const id = req?.body?.id;
   let result;
 
   if (loadBalancing_flag) {
-    axios
-      .post(`http://10.5.0.6:5000/purchase`, { id: id_post })
-      .then((resp) => {
-        result = resp.data;
-        console.log(result);
-        console.log("request from bazar to order");
-        loadBalancing_flag = false;
-        res.json(result);
-      });
+    axios.post(`http://10.5.0.6:5000/purchase`, { id: id }).then((resp) => {
+      result = resp.data;
+      console.log(result);
+      console.log("request from bazar to order");
+      loadBalancing_flag = false;
+      //use invalidate technique to ensure consistancy in the cache and servers
+      cache.del(id);
+      res.json(result);
+    });
   } else {
     axios
       .post(`http://10.5.0.6:6000/purchase`, { id: id_post })
@@ -104,6 +103,8 @@ router.post("/purchase", async (req, res) => {
         console.log(result);
         console.log("request from bazar to order");
         loadBalancing_flag = true;
+        //use invalidate technique to ensure consistancy in the cache and servers
+        cache.del(id);
         res.json(result);
       });
   }
