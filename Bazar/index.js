@@ -8,6 +8,8 @@ const NodeCache = require("node-cache");
 
 const app = express();
 const cache = new NodeCache({ stdTTL: 15 });
+//maximum number of cache elements is 20
+const cache = new NodeCache({ stdTTL: 35, maxKeys: 20 });
 let loadBalancing_flag = true;
 
 //middleware
