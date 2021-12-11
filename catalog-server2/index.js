@@ -13,7 +13,7 @@ router.get("/search", (req, res) => {
   let Topic = req?.query?.Topic;
   const result = [];
   console.log("in catalog in search end point");
-  let fileData = fs.readFileSync("./BazarBooks.json");
+  let fileData = fs.readFileSync("./BazarBooks2.json");
   let BazarBooks = JSON.parse(fileData);
   for (const element of BazarBooks) {
     if (element["topic"] == Topic) {
@@ -28,7 +28,7 @@ router.get("/info", (req, res) => {
   const temp = req?.query?.id;
   let id = parseInt(temp);
   console.log("in catalog in info end point");
-  let fileData = fs.readFileSync("./BazarBooks.json");
+  let fileData = fs.readFileSync("./BazarBooks2.json");
   let BazarBooks = JSON.parse(fileData);
   const result = [];
   for (const element of BazarBooks) {
@@ -43,7 +43,7 @@ router.put("/update", (req, res) => {
   const temp = req?.query?.id;
   let id = parseInt(temp);
   console.log("in catalog in update end point");
-  let fileData = fs.readFileSync("./BazarBooks.json");
+  let fileData = fs.readFileSync("./BazarBooks2.json");
   let BazarBooks = JSON.parse(fileData);
   const result = [];
   for (const element of BazarBooks) {
@@ -56,7 +56,7 @@ router.put("/update", (req, res) => {
   // result[0]["number of item in stock"] =
   //   parseInt(result[0]["number of item in stock"]) - 1;
 
-  fs.writeFile("BazarBooks.json", JSON.stringify(BazarBooks), (error) => {
+  fs.writeFile("BazarBooks2.json", JSON.stringify(BazarBooks), (error) => {
     if (error != null) {
       console.log(error);
     }

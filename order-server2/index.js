@@ -15,7 +15,7 @@ router.post("/purchase", (req, res) => {
   const id = req?.body?.id;
   let result;
   console.log("in order in purchase end point");
-  let orderFileData = fs.readFileSync("./OrderList.json");
+  let orderFileData = fs.readFileSync("./OrderList2.json");
   let OrderList = JSON.parse(orderFileData);
   axios.get(`http://10.5.0.5:3000/info?id=${id}`).then((resp) => {
     // console.log(resp.data);
@@ -25,7 +25,7 @@ router.post("/purchase", (req, res) => {
         finalResult = e.data;
         console.log(finalResult);
         OrderList.push(finalResult[0]);
-        fs.writeFile("OrderList.json", JSON.stringify(OrderList), (error) => {
+        fs.writeFile("OrderList2.json", JSON.stringify(OrderList), (error) => {
           if (error != null) {
             console.log(error);
           }
