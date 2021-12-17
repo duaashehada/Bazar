@@ -12,6 +12,18 @@ services:
     networks:
       vpcbr:
         ipv4_address: 10.5.0.5
+  catalog2:
+    ports:
+      - 7000:7000
+    build:
+      context: .
+      dockerfile: Dockerfile.catalog2
+    volumes:
+      - ./BazarBooks2.json:/app/src/BazarBooks2.json
+      - ./OrderList2.json:/app/src/OrderList2.json
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.4
   order:
     ports:
       - 5000:5000
@@ -24,6 +36,18 @@ services:
     networks:
       vpcbr:
         ipv4_address: 10.5.0.6
+  order2:
+    ports:
+      - 6000:6000
+    build:
+      context: .
+      dockerfile: Dockerfile.order2
+    volumes:
+      - ./BazarBooks2.json:/app/src/BazarBooks2.json
+      - ./OrderList2.json:/app/src/OrderList2.json
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.3
   bazar:
     ports:
       - 8000:8000
