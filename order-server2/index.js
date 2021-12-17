@@ -30,11 +30,33 @@ router.post("/purchase", (req, res) => {
             console.log(error);
           }
         });
-        res.json(`you purchaced the ${finalResult[0]["titel"]} successfuly :)`);
+        //notify other replica to update database to ensure the consistancy
+        axios.put(`http://10.5.0.6:5000/updateDB?id=${id}`);
+        res.json({
+          msg: `you purchaced the ${finalResult[0]["titel"]} successfuly :)`,
+          Topic: finalResult[0]["topic"],
+        });
       });
     } else {
       res.json(`this item not found :(`);
     }
+  });
+});
+
+router.put("/updateDB", (req, res) => {
+  const id = req?.query?.id;
+  let orderFileData = fs.readFileSync("./OrderList2.json");
+  let OrderList = JSON.parse(orderFileData);
+  axios.put(`http://10.5.0.4:7000/update?id=${id}`).then((e) => {
+    finalResult = e.data;
+    console.log(finalResult);
+    OrderList.push(finalResult[0]);
+    fs.writeFile("OrderList2.json", JSON.stringify(OrderList), (error) => {
+      if (error != null) {
+        console.log(error);
+      }
+    });
+    res.send("updating database done succefully");
   });
 });
 
