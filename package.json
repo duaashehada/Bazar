@@ -9,7 +9,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "catalog": "node ./catalog-server/index.js",
+    "catalog2": "node ./catalog-server2/index.js",
     "order": "node ./order-server/index.js",
+    "order2": "node ./order-server2/index.js",
     "bazar": "node ./Bazar/index.js"
   },
   "author": "Duaa Shehada",
