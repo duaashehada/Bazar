@@ -1,0 +1,5 @@
+FROM dosproject
+
+EXPOSE 7000
+
+CMD ["npm" , "run" ,  "catalog2"] 
