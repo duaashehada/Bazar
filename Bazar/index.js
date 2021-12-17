@@ -45,7 +45,7 @@ router.get("/search", verifyCache, async (req, res) => {
       res.json(result);
     });
   } else {
-    axios.get(`http://10.5.0.5:7000/search?Topic=${Topic}`).then((resp) => {
+    axios.get(`http://10.5.0.4:7000/search?Topic=${Topic}`).then((resp) => {
       // console.log(resp.data);
       result = resp.data;
       cache.set(Topic, result);
@@ -70,7 +70,7 @@ router.get("/info", verifyCache, async (req, res) => {
       res.json(result);
     });
   } else {
-    axios.get(`http://10.5.0.5:7000/info?id=${id}`).then((resp) => {
+    axios.get(`http://10.5.0.4:7000/info?id=${id}`).then((resp) => {
       // console.log(resp.data);
       result = resp.data;
       cache.set(id, result);
@@ -93,20 +93,20 @@ router.post("/purchase", async (req, res) => {
       loadBalancing_flag = false;
       //use invalidate technique to ensure consistancy in the cache and servers
       cache.del(id);
-      res.json(result);
+      cache.del(result.Topic);
+      res.json(result.msg);
     });
   } else {
-    axios
-      .post(`http://10.5.0.6:6000/purchase`, { id: id_post })
-      .then((resp) => {
-        result = resp.data;
-        console.log(result);
-        console.log("request from bazar to order");
-        loadBalancing_flag = true;
-        //use invalidate technique to ensure consistancy in the cache and servers
-        cache.del(id);
-        res.json(result);
-      });
+    axios.post(`http://10.5.0.3:6000/purchase`, { id: id }).then((resp) => {
+      result = resp.data;
+      console.log(result);
+      console.log("request from bazar to order");
+      loadBalancing_flag = true;
+      //use invalidate technique to ensure consistancy in the cache and servers
+      cache.del(id);
+      cache.del(result.Topic);
+      res.json(result.msg);
+    });
   }
 });
 
