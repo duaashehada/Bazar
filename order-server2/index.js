@@ -47,17 +47,30 @@ router.put("/updateDB", (req, res) => {
   const id = req?.query?.id;
   let orderFileData = fs.readFileSync("./OrderList2.json");
   let OrderList = JSON.parse(orderFileData);
-  axios.put(`http://10.5.0.4:7000/update?id=${id}`).then((e) => {
-    finalResult = e.data;
-    console.log(finalResult);
-    OrderList.push(finalResult[0]);
-    fs.writeFile("OrderList2.json", JSON.stringify(OrderList), (error) => {
-      if (error != null) {
-        console.log(error);
-      }
-    });
-    res.send("updating database done succefully");
+  let fileData = fs.readFileSync("./BazarBooks2.json");
+  let BazarBooks = JSON.parse(fileData);
+  const result = [];
+  for (const element of BazarBooks) {
+    if (element["id"] == id) {
+      element["number of item in stock"] =
+        parseInt(element["number of item in stock"]) - 1;
+      result.push(element);
+    }
+  }
+  fs.writeFile("BazarBooks2.json", JSON.stringify(BazarBooks), (error) => {
+    if (error != null) {
+      console.log(error);
+    }
   });
+  finalResult = result[0];
+  console.log(finalResult);
+  OrderList.push(finalResult[0]);
+  fs.writeFile("OrderList2.json", JSON.stringify(OrderList), (error) => {
+    if (error != null) {
+      console.log(error);
+    }
+  });
+  console.log("updating database done succefully");
 });
 
 const PORT = process.env.PORT || 6000;

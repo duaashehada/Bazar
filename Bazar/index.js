@@ -90,10 +90,10 @@ router.post("/purchase", async (req, res) => {
       result = resp.data;
       console.log(result);
       console.log("request from bazar to order");
-      loadBalancing_flag = false;
       //use invalidate technique to ensure consistancy in the cache and servers
       cache.del(id);
       cache.del(result.Topic);
+      loadBalancing_flag = false;
       res.json(result.msg);
     });
   } else {
@@ -101,10 +101,10 @@ router.post("/purchase", async (req, res) => {
       result = resp.data;
       console.log(result);
       console.log("request from bazar to order");
-      loadBalancing_flag = true;
       //use invalidate technique to ensure consistancy in the cache and servers
       cache.del(id);
       cache.del(result.Topic);
+      loadBalancing_flag = true;
       res.json(result.msg);
     });
   }
