@@ -64,7 +64,7 @@ router.put("/updateDB", (req, res) => {
   });
   finalResult = result[0];
   console.log(finalResult);
-  OrderList.push(finalResult[0]);
+  OrderList.push(finalResult);
   fs.writeFile("OrderList2.json", JSON.stringify(OrderList), (error) => {
     if (error != null) {
       console.log(error);
