@@ -7,8 +7,7 @@ const NodeCache = require("node-cache");
 // const fetch = require("node-fetch");
 
 const app = express();
-//maximum number of cache elements is 20
-const cache = new NodeCache({ stdTTL: 35, maxKeys: 20 });
+const cache = new NodeCache({ stdTTL: 35 });
 let loadBalancing_flag = true;
 
 //middleware
@@ -35,24 +34,30 @@ router.get("/search", verifyCache, async (req, res) => {
   const Topic = req?.query?.Topic;
   let result;
   console.log("request from bazat to catalog ");
-  if (loadBalancing_flag) {
-    axios.get(`http://10.5.0.5:3000/search?Topic=${Topic}`).then((resp) => {
-      // console.log(resp.data);
-      result = resp.data;
-      cache.set(Topic, result);
-      console.log(result);
-      loadBalancing_flag = false;
-      res.json(result);
-    });
-  } else {
-    axios.get(`http://10.5.0.4:7000/search?Topic=${Topic}`).then((resp) => {
-      // console.log(resp.data);
-      result = resp.data;
-      cache.set(Topic, result);
-      console.log(result);
-      loadBalancing_flag = true;
-      res.json(result);
-    });
+  try {
+    if (loadBalancing_flag) {
+      axios.get(`http://10.5.0.5:3000/search?Topic=${Topic}`).then((resp) => {
+        // console.log(resp.data);
+        result = resp.data;
+        cache.set(Topic, result);
+        console.log(result);
+        loadBalancing_flag = false;
+        res.json(result);
+      });
+    } else {
+      axios.get(`http://10.5.0.4:7000/search?Topic=${Topic}`).then((resp) => {
+        // console.log(resp.data);
+        result = resp.data;
+        cache.set(Topic, result);
+        console.log(result);
+        loadBalancing_flag = true;
+        res.json(result);
+      });
+    }
+  } catch (error) {
+    if (error) {
+      res.send("the topic is un-available or the data not found");
+    }
   }
 });
 
@@ -84,29 +89,34 @@ router.get("/info", verifyCache, async (req, res) => {
 router.post("/purchase", async (req, res) => {
   const id = req?.body?.id;
   let result;
-
-  if (loadBalancing_flag) {
-    axios.post(`http://10.5.0.6:5000/purchase`, { id: id }).then((resp) => {
-      result = resp.data;
-      console.log(result);
-      console.log("request from bazar to order");
-      //use invalidate technique to ensure consistancy in the cache and servers
-      cache.del(id);
-      cache.del(result.Topic);
-      loadBalancing_flag = false;
-      res.json(result.msg);
-    });
-  } else {
-    axios.post(`http://10.5.0.3:6000/purchase`, { id: id }).then((resp) => {
-      result = resp.data;
-      console.log(result);
-      console.log("request from bazar to order");
-      //use invalidate technique to ensure consistancy in the cache and servers
-      cache.del(id);
-      cache.del(result.Topic);
-      loadBalancing_flag = true;
-      res.json(result.msg);
-    });
+  try {
+    if (loadBalancing_flag) {
+      axios.post(`http://10.5.0.6:5000/purchase`, { id: id }).then((resp) => {
+        result = resp.data;
+        console.log(result);
+        console.log("request from bazar to order");
+        //use invalidate technique to ensure consistancy in the cache and servers
+        cache.del(id);
+        cache.del(result.Topic);
+        loadBalancing_flag = false;
+        res.json(result.msg);
+      });
+    } else {
+      axios.post(`http://10.5.0.3:6000/purchase`, { id: id }).then((resp) => {
+        result = resp.data;
+        console.log(result);
+        console.log("request from bazar to order");
+        //use invalidate technique to ensure consistancy in the cache and servers
+        cache.del(id);
+        cache.del(result.Topic);
+        loadBalancing_flag = true;
+        res.json(result.msg);
+      });
+    }
+  } catch (error) {
+    if (error) {
+      res.send("the item that you are trying to by not found");
+    }
   }
 });
 
