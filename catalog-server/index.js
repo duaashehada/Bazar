@@ -5,10 +5,6 @@ const fs = require("fs");
 const app = express();
 app.use(router);
 
-router.get("/", (req, res) => {
-  res.json("hello world from catalog");
-});
-
 router.get("/search", (req, res) => {
   let Topic = req?.query?.Topic;
   const result = [];
@@ -30,10 +26,12 @@ router.get("/info", (req, res) => {
   console.log("in catalog in info end point");
   let fileData = fs.readFileSync("./BazarBooks.json");
   let BazarBooks = JSON.parse(fileData);
-  const result = [];
+  let result = [];
   for (const element of BazarBooks) {
     if (element["id"] == id) {
       result.push(element);
+    } else {
+      result = [];
     }
   }
   res.json(result);
@@ -46,23 +44,29 @@ router.put("/update", (req, res) => {
   let fileData = fs.readFileSync("./BazarBooks.json");
   let BazarBooks = JSON.parse(fileData);
   const result = [];
-  for (const element of BazarBooks) {
-    if (element["id"] == id) {
-      element["number of item in stock"] =
-        parseInt(element["number of item in stock"]) - 1;
-      result.push(element);
+  try {
+    for (const element of BazarBooks) {
+      if (element["id"] == id) {
+        element["number of item in stock"] =
+          parseInt(element["number of item in stock"]) - 1;
+        result.push(element);
+      }
+    }
+    // result[0]["number of item in stock"] =
+    //   parseInt(result[0]["number of item in stock"]) - 1;
+
+    fs.writeFile("BazarBooks.json", JSON.stringify(BazarBooks), (error) => {
+      if (error != null) {
+        console.log(error);
+      }
+    });
+
+    res.json(result);
+  } catch (error) {
+    if (error) {
+      res.json([]);
     }
   }
-  // result[0]["number of item in stock"] =
-  //   parseInt(result[0]["number of item in stock"]) - 1;
-
-  fs.writeFile("BazarBooks.json", JSON.stringify(BazarBooks), (error) => {
-    if (error != null) {
-      console.log(error);
-    }
-  });
-
-  res.json(result);
 });
 
 const PORT = process.env.PORT || 3000;
