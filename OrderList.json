@@ -181,7 +181,7 @@
     "topic": "undergraduate school",
     "titel": "How to finish Project 3 on time",
     "cost": 250,
-    "number of item in stock": 27
+    "number of item in stock": 26
   },
   {
     "id": 5,
@@ -189,6 +189,30 @@
     "topic": "undergraduate school",
     "titel": "How to finish Project 3 on time",
     "cost": 250,
-    "number of item in stock": 26
+    "number of item in stock": 25
+  },
+  {
+    "id": 5,
+    "item_number": 75,
+    "topic": "undergraduate school",
+    "titel": "How to finish Project 3 on time",
+    "cost": 250,
+    "number of item in stock": 24
+  },
+  {
+    "id": 5,
+    "item_number": 75,
+    "topic": "undergraduate school",
+    "titel": "How to finish Project 3 on time",
+    "cost": 250,
+    "number of item in stock": 23
+  },
+  {
+    "id": 4,
+    "item_number": 35,
+    "topic": "undergraduate school",
+    "titel": "Cooking for the Impatient Undergrad.",
+    "cost": 200,
+    "number of item in stock": 22
   }
 ]
